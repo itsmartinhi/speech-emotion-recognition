@@ -6,7 +6,7 @@ class Augmentation:
     AUG_NOISE = 'noise'
     AUG_SHIFT = 'shift'
     AUG_PITCH = 'pitch'
-    AUG_STRETCH = 'strech'
+    AUG_STRETCH = 'stretch'
 
     augmentation_styles = [AUG_NOISE, AUG_SHIFT, AUG_PITCH, AUG_STRETCH]
 
