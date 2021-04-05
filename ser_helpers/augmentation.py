@@ -70,7 +70,7 @@ class Augmentation:
         return data
 
     @staticmethod
-    def add_stretch(data, min_stretch=0.5, max_stretch=2):
+    def add_stretch(data, min_stretch=0.5, max_stretch=2.0):
         """
         Add positive or negative stretch
         :param max_stretch:

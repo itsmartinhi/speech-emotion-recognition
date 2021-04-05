@@ -25,11 +25,14 @@ class DataManager:
     def get_path_to_aug_pkl(self, aug_name):
         return self.DATA_PATH + 'df_{}.pkl'.format(aug_name)
 
-    def get_augmented_data(self, augmentations=[]):
+    def get_augmented_data(self, augmentations=[], random_state=True):
 
         df_normal = self.load_df(self.PATH_DF_NORMAL)
 
-        df_train, df_test = train_test_split(df_normal, test_size=0.2, random_state=42, shuffle=True)
+        if random_state:
+            df_train, df_test = train_test_split(df_normal, test_size=0.2, random_state=42, shuffle=True)
+        else:
+            df_train, df_test = train_test_split(df_normal, test_size=0.2, shuffle=True)
 
         indices = df_train.index.values.tolist()
 
@@ -37,7 +40,8 @@ class DataManager:
             df_aug = self.load_df(self.get_path_to_aug_pkl(augmentation))
             df_aug = df_aug.iloc[indices]
             df_train = pd.concat([df_train, df_aug])
-            df_train.reset_index(drop=True, inplace=True)
+            df_train = df_train.sample(frac=1).reset_index(drop=True)
+            print('shuffle it')
 
         X_train = np.stack(df_train['mfcc'].to_numpy())
         y_train = np.stack(df_train['emotion'].to_numpy())
@@ -45,7 +49,11 @@ class DataManager:
         X_test = np.stack(df_test['mfcc'].to_numpy())
         y_test = np.stack(df_test['emotion'].to_numpy())
 
-        print(len(df_train))
-        print(len(df_test))
-
         return X_train, y_train, X_test, y_test
+
+# dm = DataManager()
+# df_normal = dm.load_df(dm.PATH_DF_NORMAL)
+# print(df_normal.head())
+#
+# df_noise = dm.load_df(dm.PATH_DF_NOISE)
+# print(df_noise.head())
